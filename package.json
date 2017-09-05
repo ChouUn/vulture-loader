@@ -1,0 +1,45 @@
+{
+  "name": "vulture-loader",
+  "version": "0.1.0",
+  "description": "Webpack loader for Vue.js components written in Typescript",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "webpack --config example/webpack.config.js --watch",
+    "build": "webpack --config example/webpack.config.js",
+    "release": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChouUn/vulture-loader.git"
+  },
+  "keywords": [
+    "vue",
+    "loader",
+    "typescript",
+    "ts"
+  ],
+  "author": "ChouUn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChouUn/vulture-loader/issues"
+  },
+  "homepage": "https://github.com/ChouUn/vulture-loader#readme",
+  "devDependencies": {
+    "@types/node": "^8.0.26",
+    "@types/ramda": "^0.24.7",
+    "@types/resolve": "0.0.4",
+    "@types/source-map": "^0.5.1",
+    "awesome-typescript-loader": "^3.2.3",
+    "typescript": "^2.4.2",
+    "vue": "^2.4.2"
+  },
+  "dependencies": {
+    "hash-sum": "^1.0.2",
+    "loader-utils": "^1.1.0",
+    "ramda": "^0.24.1",
+    "resolve": "^1.4.0",
+    "vue-template-compiler": "^2.4.2",
+    "vue-template-es2015-compiler": "^1.5.3"
+  }
+}
