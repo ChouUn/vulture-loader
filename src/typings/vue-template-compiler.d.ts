@@ -1,8 +1,9 @@
 
 /**
- * package: https://www.npmjs.com/package/vue-template-compiler
+ * npm: https://www.npmjs.com/package/vue-template-compiler
  * github: https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler
- * flow: https://github.com/vuejs/vue/blob/dev/flow/compiler.js
+ * 
+ * ref: https://github.com/vuejs/vue/blob/dev/flow/compiler.js
  */
 declare module 'vue-template-compiler' {
   type Maybe<T> = T | null | void

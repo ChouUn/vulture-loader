@@ -1,4 +1,8 @@
 
+/**
+ * source code: https://github.com/ktsn/vue-template-loader/blob/master/lib/builder/code.js
+ */
+
 import * as assert from 'assert'
 
 export default function code (text: string, preserveIndentNum = 0) {

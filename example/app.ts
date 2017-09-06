@@ -13,8 +13,4 @@ export default class App extends Vue {
       message: 'Hello Cruel World'
     }
   }
-  message: 1
-  computed () {
-    this.message
-  }
 }

@@ -1,4 +1,8 @@
 
+/**
+ * source code: https://github.com/ktsn/vue-template-loader/blob/master/lib/builder/builder.js
+ */
+
 import * as assert from 'assert'
 import { SourceNode, SourceMapConsumer } from 'source-map'
 import code from './code'
