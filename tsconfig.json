@@ -8,7 +8,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "lib",
-    "types": [ "node" ],
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types",
       "src/typings"

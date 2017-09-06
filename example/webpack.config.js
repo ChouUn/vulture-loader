@@ -25,8 +25,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        // use: ['../'],
-        loader: './',
+        use: ['./'],
       },
     ],
   },

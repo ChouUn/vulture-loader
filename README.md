@@ -1,7 +1,7 @@
 
 # Vulture Loader
 
-A webpack loader for Vue.js components written in Typescript
+A Typescript decorator for class-style Vue component with Webpack loader
 
 ## Example
 
