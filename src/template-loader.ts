@@ -1,12 +1,15 @@
 
 import Vue, { ComponentOptions } from 'vue'
 import * as compiler from 'vue-template-compiler'
+import { js_beautify } from 'js-beautify'
 import transpile = require('vue-template-es2015-compiler')
 
 import { VueClass } from './declaration'
 
 function toFunction (code: string) {
-  return `function(){${code}}`
+  return js_beautify('function () {' + code + '}', {
+    indent_size: 2,
+  })
 }
 
 export interface ICompileResult {
