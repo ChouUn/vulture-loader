@@ -96,3 +96,19 @@ See `example/`
 1. open terminal 
 2. type `npm run dev`, wait for finishing
 3. type `open example/index.html`
+
+## Features
+
+- [x] Component
+- [x] Pre-compile Template
+- [x] ES2015 in Templates
+- [ ] Hot Reload
+- [ ] Internal Hooks
+- [x] Prop
+- [ ] Computed
+- [ ] Watch
+- [ ] Method
+- [ ] Global CSS
+- [ ] Scoped CSS
+- [ ] CSS Modules
+- [ ] src (HTMl, CSS)
