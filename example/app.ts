@@ -1,16 +1,21 @@
 
 import Vue from 'vue'
-import { Component } from '../src/component'
 
-// import template from './app.html'
+import { Component, Prop } from '../src/index'
 
 @Component({
   template: require('./app.html'),
 })
 export default class App extends Vue {
-  data () {
-    return {
-      message: 'Hello Cruel World'
-    }
-  }
+
+  message = 'Cruel'
+
+  @Prop({
+    type: String
+  })
+  propMessage: string
+
+  @Prop
+  propEnding: string
+
 }

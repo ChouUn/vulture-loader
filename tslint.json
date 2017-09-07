@@ -102,9 +102,6 @@
       "check-type"
     ],
     "no-irregular-whitespace": true,
-    "ter-arrow-body-style": [true, "as-needed", {
-      "requireReturnForObjectLiteral": true
-    }],
     "ter-arrow-parens": [true, "as-needed", {
       "requireForBlockBody": false
     }],

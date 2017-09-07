@@ -8,9 +8,7 @@ import * as assert from 'assert'
 export default function code (text: string, preserveIndentNum = 0) {
   const lines = text.split('\n')
     .filter(l => !/^\s*$/.test(l))
-    .map(l => {
-      return whitespace(preserveIndentNum) + l.replace(/\s+$/, '')
-    })
+    .map(l => (whitespace(preserveIndentNum) + l.replace(/\s+$/, '')))
 
   const match = lines[0].match(/^(\s+)/)
   const suppress = !match ? 0 : match[1].length - preserveIndentNum

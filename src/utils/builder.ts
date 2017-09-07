@@ -23,7 +23,7 @@ export default class Builder {
     return this.blockDepth * 2
   }
 
-  enterBlock (start: string, end: string, fn: () => void) {
+  public enterBlock (start: string, end: string, fn: () => void) {
     this.root.add(code(start, this.indent) + '\n')
     this.blockDepth += 1
 
@@ -33,7 +33,7 @@ export default class Builder {
     this.root.add(code(end, this.indent) + '\n')
   }
 
-  addLine (text: string, map?: string) {
+  public addLine (text: string, map?: string) {
     if (map) {
       const smc = new SourceMapConsumer(map)
       const node = SourceNode.fromStringWithSourceMap(text, smc)
@@ -46,7 +46,7 @@ export default class Builder {
     }
   }
 
-  generate () {
+  public generate () {
     assert(
       this.blockDepth === 0,
       `Builder still does not leave from ${this.blockDepth} block(s) yet`
