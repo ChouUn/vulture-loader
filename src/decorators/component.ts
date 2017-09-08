@@ -1,5 +1,5 @@
 
-import Vue, { ComponentOptions, ComputedOptions } from 'vue'
+import Vue, { ComponentOptions, ComputedOptions, WatchHandler } from 'vue'
 import { ICompiledFunctionsResult } from 'vue-template-compiler'
 import * as R from 'ramda'
 
@@ -16,23 +16,124 @@ function Component <U extends Vue, V extends VueClass>(first: ComponentOptions<U
   }
 }
 
-export const $internalHooks = [
+const reservedMember = [
   'data',
   'props',
+  'propsData',
+  'computed',
+  'methods',
+  'watch',
+
   'beforeCreate',
   'created',
-  'beforeMount',
-  'mounted',
   'beforeDestroy',
   'destroyed',
+  'beforeMount',
+  'mounted',
   'beforeUpdate',
   'updated',
   'activated',
   'deactivated',
+
+  'el',
+  'template',
   'render',
+  'renderError',
+  'staticRenderFns',
+
+  'directives',
+  'components',
+  'transitions',
+  'filters',
+
+  'provide',
+  'inject',
+
+  'model',
+
+  'parent',
+  'mixins',
+  'name',
+  'extends',
+  'delimiters',
+  'comments',
+  'inheritAttrs',
+]
+
+const mergableMember = [
+  'data',
+  'props',
+  'propsData',
+  'computed',
+  'methods',
+  'watch',
+]
+
+const lifecycleHooks = [
+  'beforeCreate',
+  'created',
+  'beforeDestroy',
+  'destroyed',
+  'beforeMount',
+  'mounted',
+  'beforeUpdate',
+  'updated',
+  'activated',
+  'deactivated',
 ]
 
 declare type WrapTemplate = (options: ComponentOptions<any>) => ComponentOptions<any> & ICompiledFunctionsResult
+
+function normalizeOptions (options: ComponentOptions<any>) {
+  // data
+  if (R.is(Function, options.data)) {
+    options.data = (options.data as (this: any) => Object)()
+  }
+
+  if (!R.is(Object, options.data)) {
+    options.data = {}
+  }
+  // props
+  if (R.is(Array, options.props)) {
+    options.props = (options.props as string[]).reduce((props, prop) => {
+      props[prop] = {}
+      return props
+    }, {})
+  }
+  if (!R.is(Object, options.props)) {
+    options.props = {}
+  }
+
+  // computed
+  if (options.computed) {
+    R.forEachObjIndexed((value, key) => {
+      if (R.is(Function, value)) {
+        options.computed![key] = {
+          get: value as (this: any) => any,
+        }
+      }
+    }, options.computed)
+  }
+  if (!R.is(Object, options.computed)) {
+    options.computed = {}
+  }
+
+  // watch
+  if (options.watch) {
+    R.forEachObjIndexed((value, key) => {
+      if (R.is(Function, value)) {
+        options.watch![key] = {
+          handler: value as WatchHandler<any>
+        }
+      }
+    }, options.watch)
+  }
+  if (!R.is(Object, options.watch)) {
+    options.watch = {}
+  }
+
+  return options
+}
 
 function componentFactory (component: any, options: ComponentOptions<any> = {}) {
 
@@ -43,15 +144,7 @@ function componentFactory (component: any, options: ComponentOptions<any> = {}) 
 
   // name
   options.name = options.name || (component as any).name
-  // data
-  if (R.is(Function, options.data)) {
-    options.data = (options.data as (this: any) => Object)()
-  }
-  options.data = options.data || {}
-  // props
-  options.props = options.props || {}
-  // computed
-  options.computed = options.computed || {}
+  options = normalizeOptions(options)
 
   const proto = component.prototype
   const ins = new component()
@@ -60,20 +153,29 @@ function componentFactory (component: any, options: ComponentOptions<any> = {}) 
     if (key === 'constructor') {
       continue
     }
-
+    // Vue component instance properties
     if (key.startsWith('$') || key.startsWith('_')) {
       continue
     }
 
-    const descriptor = Object.getOwnPropertyDescriptor(proto, key)
-    if (!descriptor) {
-      options.data[key] = ins[key]
+    if (mergableMember.includes(key)) {
+      options[key] = { ...options[key], ...proto[key] }
+      continue
+    }
+    if (reservedMember.includes(key)) {
+      options[key] = proto[key]
       continue
     }
 
+    const descriptor = Object.getOwnPropertyDescriptor(proto, key)
+    // data properties
+    if (!descriptor) {
+      options.data![key] = ins[key]
+      continue
+    }
+    // computed properties
     if (descriptor.get || descriptor.set) {
-      // computed properties
-      options.computed[key] = {
+      options.computed![key] = {
         get: descriptor.get,
         set: descriptor.set,
       }
@@ -81,32 +183,11 @@ function componentFactory (component: any, options: ComponentOptions<any> = {}) 
     }
 
     options[key] = proto[key]
+    console.debug(key, proto[key], ins[key])
   }
 
   const data = options.data
   options.data = () => data
-
-  // Object
-  //   .getOwnPropertyNames(proto)
-  //   .forEach(key => {
-  //     if (key === 'constructor') {
-  //       return
-  //     }
-
-  //     // hooks
-  //     if ($internalHooks.indexOf(key) > -1) {
-  //       options[key] = proto[key]
-  //       return
-  //     }
-
-  //     const descriptor = Object.getOwnPropertyDescriptor(proto, key)
-  //     if (R.is(Function, descriptor.value)) {
-  //       // methods
-  //       (options.methods || (options.methods = {}))[key] = descriptor.value
-  //     } else {
-  //       (options.data || (options.data = {}))[key] = descriptor.value
-  //     }
-  //   })
 
   // find super
   const sPropto = Object.getPrototypeOf(proto)
