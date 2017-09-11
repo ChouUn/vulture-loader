@@ -13,13 +13,20 @@ app.html
   <span class="message">{{ message }}</span>
   {{ propMessage }}
   {{ propEnding }}
+  <button @click.once="changeMessage">Refuse</button>
 </div>
 ```
 
-performance
+app.html preview
 
 ```
 Hello Cruel World !
+```
+
+app.html preview (after click)
+
+```
+Hello Merciful World !
 ```
 
 app.ts
@@ -27,7 +34,7 @@ app.ts
 ``` typescript
 import Vue from 'vue'
 
-import { Component, Prop } from '../src/index'
+import { Component, Prop, Watch, Method } from '../src/index'
 
 @Component({
   template: require('./app.html'),
@@ -41,8 +48,18 @@ export default class App extends Vue {
   })
   propMessage: string
 
-  @Prop
+  @Prop()
   propEnding: string
+
+  @Method()
+  changeMessage($event: Event) {
+    this.message = 'Merciful'
+  }
+
+  @Watch('message')
+  watchMessage(val: string, oldVal: string) {
+    console.log('new: %s, old: %s', val, oldVal)
+  }
 
 }
 ```
@@ -106,8 +123,8 @@ See `example/`
 - [ ] Internal Hooks
 - [x] Prop
 - [ ] Computed
-- [ ] Watch
-- [ ] Method
+- [x] Watch
+- [x] Method
 - [ ] Global CSS
 - [ ] Scoped CSS
 - [ ] CSS Modules

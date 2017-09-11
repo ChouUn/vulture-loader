@@ -148,6 +148,7 @@ function componentFactory (component: any, options: ComponentOptions<any> = {}) 
 
   const proto = component.prototype
   const ins = new component()
+  const ignores: string[] = ins['ignores']
 
   for (let key in ins) {
     if (key === 'constructor') {
@@ -155,6 +156,10 @@ function componentFactory (component: any, options: ComponentOptions<any> = {}) 
     }
     // Vue component instance properties
     if (key.startsWith('$') || key.startsWith('_')) {
+      continue
+    }
+    // Vulture instance properties
+    if (key === 'ignores' || ignores.includes(key)) {
       continue
     }
 
