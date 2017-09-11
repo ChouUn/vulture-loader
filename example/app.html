@@ -4,5 +4,8 @@
   <span class="message">{{ message }}</span>
   {{ propMessage }}
   {{ propEnding }}
-  <button @click.once="changeMessage">Refuse</button>
+  <button 
+    :disabled="buttonDisabled"
+    @click.once="changeMessage" 
+  >Refuse</button>
 </div>

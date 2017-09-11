@@ -13,7 +13,10 @@ app.html
   <span class="message">{{ message }}</span>
   {{ propMessage }}
   {{ propEnding }}
-  <button @click.once="changeMessage">Refuse</button>
+  <button 
+    :disabled="buttonDisabled"
+    @click.once="changeMessage" 
+  >Refuse</button>
 </div>
 ```
 
@@ -41,8 +44,10 @@ import { Component, Prop, Watch, Method } from '../src/index'
 })
 export default class App extends Vue {
 
+  // data
   message = 'Cruel'
 
+  // props
   @Prop({
     type: String
   })
@@ -51,16 +56,22 @@ export default class App extends Vue {
   @Prop()
   propEnding: string
 
+  // methods
   @Method()
   changeMessage($event: Event) {
     this.message = 'Merciful'
   }
 
+  // watch
   @Watch('message')
   watchMessage(val: string, oldVal: string) {
     console.log('new: %s, old: %s', val, oldVal)
   }
 
+  // computed
+  get buttonDisabled () {
+    return this.message !== 'Cruel'
+  }
 }
 ```
 
@@ -122,7 +133,7 @@ See `example/`
 - [ ] Hot Reload
 - [ ] Internal Hooks
 - [x] Prop
-- [ ] Computed
+- [x] Computed
 - [x] Watch
 - [x] Method
 - [ ] Global CSS
