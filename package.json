@@ -1,6 +1,6 @@
 {
   "name": "vulture-loader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Typescript decorator for class-style Vue component with Webpack loader",
   "main": "lib/index.js",
   "scripts": {
